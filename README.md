@@ -2,6 +2,10 @@
 对每一位来到这里的Tenno与其它人表示感谢！
 
 We are very welcome that the Tenno and people who come here.
+
+**注意：本程序暂未开发完毕！！！**
+
+**WARNING: This program has not been to fully develop!**
 ## 概述 Overview
 2019年的TennoCon即将到来。根据[DE官网上的消息](https://www.warframe.com/zh-hans/news/warframe-empyrean-e3-teaser-trailer)，其显示DE将在[Twitch](https://www.twitch.tv/warframe)和Mixer（详细链接不详）上进行直播。如果新闻无误，Tenno将可以在Twitch或者Mixer上在美国东部时间（简称EST）2019年7月6日晚上5:59前通过观看超过30分钟来获得一个Lotus幻纹。随后，在美国东部时间晚上6:00到7:00，连续观看30分钟将可以获得一个Warframe槽位和一个Nekros Prime。
 
