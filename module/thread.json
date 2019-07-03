@@ -1,0 +1,9 @@
+{
+  "chrome.exe": "Google Chrome",
+  "firefox.exe": "Firefox",
+  "MicrosoftEdgeCP.exe": "Microsoft Edge",
+  "360se.exe": "360安全浏览器,360-Safe-Browser",
+  "iexplore": "Internet Explorer",
+  "opera.exe": "Opera",
+  "sogouexplorer.exe": "搜狗浏览器,Sougou-Browser"
+}

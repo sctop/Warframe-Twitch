@@ -1,5 +1,6 @@
 import psutil
 import os
+import platform
 
 
 class ThreadExitError(Exception):
@@ -50,22 +51,23 @@ class ThreadCheck():
 
 def get_info(content):
     """
-    一个获取系统CPU 内存 IP MAC的函数
+    一个获取系统CPU 内存 IP MAC SYSTEM的函数
 
-    :param content: 可以传入带“CPU”“MEM”“NET”内容的列表以获得需要的数据
+    :param content: 可以传入带“CPU”“MEM”“NET”“SYSTEM”内容的列表以获得需要的数据
     :return: 返回所需要的数据
     """
     cpu = "Unknown"
     mem = "Unknown"
     ip = "Unknown"
     mac = "Unknown"
+    system = "Unknown"
     if "CPU" in content or content == "ALL":
-        cpu = {"logical": psutil.cpu_count(), "physical": psutil.cpu_count(logical=False),
-               "used": {}}
-        temp = list(psutil.cpu_percent(percpu=True))
-        for i in range(len(temp)):
-            cpu["used"][i] = temp[i]
+        # 返回{逻辑核心 物理核心 使用率}
+        cpu = {"logical": int(psutil.cpu_count()), "physical": int(psutil.cpu_count(logical=False)),
+               "used": psutil.cpu_percent()}
     if "MEM" in content or content == "ALL":
+        # virtual(虚拟内存)返回 {总计 可用 使用率 使用值}
+        # swap(交换内存)返回 {总计 使用率 使用值}
         mem = {"virtual": {}, "swap": {}}
         temp = list(psutil.virtual_memory())
         mem["virtual"]["total"] = temp[0]
@@ -77,6 +79,20 @@ def get_info(content):
         mem["swap"]["used"] = temp[1]
         mem["swap"]["used_per"] = temp[3]
     if "NET" in content or content == "ALL":
-        ip = list(psutil.net_if_addrs()["以太网"][1])[1]
-        mac = psutil.net_if_addrs()["以太网"][0][1]
-    return {"cpu": cpu, "mem": mem, "network": {"ip": ip, "mac": mac}}
+        # 由于系统版本不同可能引发错误
+        try:
+            ip = list(psutil.net_if_addrs()["以太网"][1])[1]
+            mac = psutil.net_if_addrs()["以太网"][0][1]
+        except KeyError:
+            try:
+                ip = list(psutil.net_if_addrs()["本地连接"][1])[1]
+                mac = psutil.net_if_addrs()["本地连接"][0][1]
+            except Exception:
+                ip = "0.0.0.0"
+                mac = "000000000000"
+    if "SYS" in content or content == "ALL":
+        temp = platform.uname()
+        temp = list(temp)
+        system = {"OS": temp[0], "version": temp[3],
+                  "machine": temp[4]}
+    return {"cpu": cpu, "mem": mem, "network": {"ip": ip, "mac": mac}, "system": system}

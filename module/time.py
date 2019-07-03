@@ -10,30 +10,28 @@ class WhatTheFuckError(Exception):
         self.code = code
 
 
-def format_time(tz, space):
+def format_time(tz, mode):
     """
-    此函数用于格式化一个时间字符串
+    此函数用于格式化基于现在时间的一个时间字符串
 
     :param tz: 传入一个时区。对于中国地区请使用“Asia/Taipei”，可使用简写
     :param space: 是否需要空格，一般情况下作文件名。
-    :return: 非不需要空格情况下，函数将返回格式为“YY-MM-DD HH-MM-SS 星期 时区”
+    :return: 非不需要空格情况下，函数将返回格式为“YY-MM-DD HH-MM-SS 时区”
     """
     # 本地时间时区设定
     tz_set = pytz.timezone(tz)
     # 年月日，格式“YY-MM-DD”
-    if space:
-        yymmdd = datetime.datetime.now(tz_set).strftime("%Y-%m-%d ")
-    else:
+    if mode == "nospace":
         yymmdd = datetime.datetime.now(tz_set).strftime("%Y-%m-%d")
+    else:
+        yymmdd = datetime.datetime.now(tz_set).strftime("%Y-%m-%d ")
     # 时分秒
-    if space:
-        hhmmss = datetime.datetime.now(tz_set).strftime("%H:%M:%S %A ")
+    if mode == "nospace":
+        hhmmss = datetime.datetime.now(tz_set).strftime("%H%M%S")
     else:
         hhmmss = datetime.datetime.now(tz_set).strftime("%H:%M:%S")
-    # 时区，输出格式“HH:MM”
-    if space:
-        timezone = datetime.datetime.now(tz_set).strftime("%z")
-        timezone = str(timezone[0] + timezone[1] + timezone[2] + ":" + timezone[3] + timezone[4])
+    if mode == "log":
+        timezone = datetime.datetime.now(tz_set).strftime(" %z")
     else:
         timezone = ""
     return yymmdd + hhmmss + timezone
@@ -137,3 +135,87 @@ def date_format(year=0, month=0, day=0, hour=0, min=0, second=0, ms=0):
             else:
                 flag = True
     return temp2[0], temp2[1], temp2[2], temp1[1], temp1[2], temp1[3], temp1[4]
+
+
+def time_check(time1, time2):
+    """
+    此程序用于检测time1是否大于、小于或等于time2。
+    两个参数必须均为一个由 年、月、日、小时、分钟、秒、毫秒 组成的元组。
+
+    :param time1:
+    :param time2:
+    :return: 一个列表。第0项元素为time1小于time2，第1项为大于，第2项为一样
+    """
+    if len(time1) != len(time2):
+        return 1
+    less = [True, False, False]
+    great = [False, True, False]
+    same = [False, False, True]
+    for i in range(len(time1)):
+        if time1[i] > time2[i]:
+            return great
+        if time1[i] < time2[i]:
+            return less
+        if time1[i] == time2[i] and i == (len(time1) - 1):
+            return same
+
+
+def read_config_time(object):
+    """
+    创建一个符合python规范的时间内容
+
+    :param object: 必须经过例如crate_config_time之类的操作
+    :return:
+    """
+    temp = list(object)
+    temp2 = []
+    temp2.append(int(temp[0:4]))  # 年
+    temp2.append(int(temp[4:7]))  # 月
+    temp2.append(int(temp[7:9]))  # 日
+    temp2.append(int(temp[10:13]))  # 小时
+    temp2.append(int(temp[13:15]))  # 分钟
+    temp2.append(int(temp[15:17]))  # 秒
+    return temp2
+
+
+def crate_config_time(object):
+    """
+    创建一个用于配置的文件的时间string字符串。包含年月日小时分钟秒
+
+    :param object: 必须经过read_config_time函数或相似的处理
+    :return: 将“8”转换为“08”的一个列表
+    """
+    temp = list(object)
+    temp2 = []
+    if len(temp) == 6:
+        for i in range(len(temp)):
+            if i < 1:
+                temp2.append(str(temp[i]))
+            else:
+                temp3 = str(temp[i])
+                if int(temp3) < 10 and len(temp3) != 2:
+                    temp3 = "0" + temp3
+                    temp2.append(temp3)
+                else:
+                    temp2.append(str(temp[i]))
+    else:
+        return 1
+    return temp2
+
+
+def wait_input(object, lang):
+    content = object[0]
+    if object[1] == "None":
+        inputs = ""
+    else:
+        inputs = object[1]
+    print(content)
+    if inputs != "":
+        flag = True
+        while flag:
+            flag = False
+            temp = input()
+            if temp <= 0 or temp > len(object[1]):
+                print(lang)
+                flag = True
+    return object[1][str(temp)]
