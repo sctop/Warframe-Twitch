@@ -1,7 +1,7 @@
 {
   "link": {
     "WarframeAccount": "",
-    "Twitch": "https://www.twitch.tv/warframe"
+    "Twitch": ""
   },
   "delay": {
     "loading": {
@@ -16,16 +16,16 @@
       ]
     },
     "live": {
-      "EST_in": "2019-07-06 16:00:00 Saturday -05:00",
+      "EST_in": "2019-07-06 16:00:00",
       "timer": {
         "Ephemera": {
-          "begin": "2019-07-06 10:00:00 Saturday -05:00",
-          "end": "2019-07-07 17:59:00 Saturday -05:00",
+          "begin": "2019-07-06 10:00:00",
+          "end": "2019-07-07 17:59:00",
           "lasting": 1800
         },
         "Warframe": {
-          "begin": "2019-07-06 18:00:00 Saturday -05:00",
-          "end": "2019-07-06 19:00:00 Saturday -05:00",
+          "begin": "2019-07-06 18:00:00",
+          "end": "2019-07-06 19:00:00",
           "lasting": 1800
         }
       }
@@ -34,10 +34,14 @@
   "browser": {
     "name": "",
     "thread_name": "",
-    "command_format": "",
     "pos": ""
   },
   "mail": {
-    "address": ""
+    "address": "",
+    "password": "",
+    "username": "",
+    "host": "",
+    "port": 0,
+    "enable": ""
   }
 }

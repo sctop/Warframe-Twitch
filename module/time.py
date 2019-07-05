@@ -12,7 +12,7 @@ class WhatTheFuckError(Exception):
 
 def format_time(tz, mode):
     """
-    此函数用于格式化基于现在时间的一个时间字符串
+    此函数用于格式化一个基于现在时间的时间字符串
 
     :param tz: 传入一个时区。对于中国地区请使用“Asia/Taipei”，可使用简写
     :param space: 是否需要空格，一般情况下作文件名。
@@ -167,14 +167,14 @@ def read_config_time(object):
     :param object: 必须经过例如crate_config_time之类的操作
     :return:
     """
-    temp = list(object)
+    temp = object
     temp2 = []
     temp2.append(int(temp[0:4]))  # 年
-    temp2.append(int(temp[4:7]))  # 月
-    temp2.append(int(temp[7:9]))  # 日
-    temp2.append(int(temp[10:13]))  # 小时
-    temp2.append(int(temp[13:15]))  # 分钟
-    temp2.append(int(temp[15:17]))  # 秒
+    temp2.append(int(temp[5:7]))  # 月
+    temp2.append(int(temp[8:10]))  # 日
+    temp2.append(int(temp[11:13]))  # 小时
+    temp2.append(int(temp[14:16]))  # 分钟
+    temp2.append(int(temp[17:19]))  # 秒
     return temp2
 
 
@@ -193,6 +193,8 @@ def crate_config_time(object):
                 temp2.append(str(temp[i]))
             else:
                 temp3 = str(temp[i])
+                if i == 3:
+                    temp3 = temp3 + " "
                 if int(temp3) < 10 and len(temp3) != 2:
                     temp3 = "0" + temp3
                     temp2.append(temp3)
@@ -215,7 +217,7 @@ def wait_input(object, lang):
         while flag:
             flag = False
             temp = input()
-            if temp <= 0 or temp > len(object[1]):
+            if int(temp) <= 0 or int(temp) > len(object[1]):
                 print(lang)
                 flag = True
     return object[1][str(temp)]

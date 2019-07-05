@@ -41,7 +41,6 @@ def del_translation(LangName, AllPos="../lang/all.json"):
 def get_lang(AllPos="lang/all.json"):
     with open(AllPos, mode='r', encoding="UTF-8") as file:
         content = json.load(file)
-    print(content)
     flag = True
     while flag:
         flag = False

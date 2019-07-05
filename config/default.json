@@ -5,8 +5,8 @@
   },
   "delay": {
     "loading": {
-      "WarframeAccount": 120,
-      "Twitch": 120
+      "WarframeAccount": 30,
+      "Twitch": 30
     },
     "sleep": {
       "time": 1800,

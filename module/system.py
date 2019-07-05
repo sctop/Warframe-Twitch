@@ -1,7 +1,7 @@
 import psutil
 import os
 import platform
-
+from time import sleep
 
 class ThreadExitError(Exception):
     def __init__(self, code=1, message="Process unexpectedly quits", args=("Process unexpectedly quits",)):
@@ -10,11 +10,10 @@ class ThreadExitError(Exception):
         self.code = code
 
 
-class ThreadCheck():
-    def __init__(self, thread_name, thread_pos, config, url):
+class Thread():
+    def __init__(self, thread_name, thread_pos):
         self.__THREAD__ = str(thread_name)
         self.__THREADPOS__ = str(thread_pos)
-        self.__URL__ = str(url)
 
     def check(self):
         found = False
@@ -29,23 +28,24 @@ class ThreadCheck():
         return found
 
     def kill(self):
-        if self.check() == False:
-            os.popen("taskkill /T /F /IM " + self.__THREAD__)
+        os.popen("taskkill /T /F /IM " + self.__THREAD__)
 
-    def restart(self):
-        os.popen('"' + str(self.__THREADPOS__) + '"' + self.config.file_content["browser"]["command_format"] + self.url)
-        raise ThreadExitError("Thread exit in unknown case")
+    def start(self, url):
+        os.popen('"' + str(self.__THREADPOS__) + '" "' + url + '"')
 
     def all_thread(self):
         thread_pid = []
+        sleep(2)
         pids = psutil.pids()
         for pid in pids:
-            p = psutil.Process(pid)
-            # get process name according to pid
-            process_name = p.name()
-            # kill process "sleep_test1"
-            if str(self.__THREAD__) == process_name:
-                thread_pid.append(int(p.pid))
+            try:
+                p = psutil.Process(pid)
+                # get process name according to pid
+                process_name = p.name()
+                if str(self.__THREAD__) == process_name:
+                    thread_pid.append(int(p.pid))
+            except Exception as e:
+                print(e)
         return thread_pid
 
 
